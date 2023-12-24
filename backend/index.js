@@ -9,7 +9,7 @@ const port = 5000
 app.use(cors())
 app.use(express.json())
 app.route('/').get((req, res) => {
-  res.json({ message: "Server is running" })
+  res.json({ message: "Server is running", "docs": "https://documenter.getpostman.com/view/22926184/2s9Ykrcfb4" })
 })
 // Available Routes
 app.use('/api/auth', require('./routes/auth'))
