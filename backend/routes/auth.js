@@ -6,14 +6,14 @@ const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var fetchuser = require('../middleware/fetchuser');
 
-const JWT_SECRET = 'mihir$oy';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // ROUTE 1: Create a User using: POST "/api/auth/createuser". No login required
 router.post('/createuser', [
     body('name', 'Enter a valid name').isLength({ min: 3 }),
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password must be atleast 5 characters').isLength({ min: 5 }),
-], async(req, res) => {
+], async (req, res) => {
     // If there are errors, return Bad request and the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -56,7 +56,7 @@ router.post('/createuser', [
 router.post('/login', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password cannot be blank').exists(),
-], async(req, res) => {
+], async (req, res) => {
     let success = false;
     // If there are errors, return Bad request and the errors
     const errors = validationResult(req);
@@ -99,10 +99,10 @@ router.post('/login', [
 
 
 // ROUTE 3: Get loggedin User Details using: POST "/api/auth/getuser". Login required
-router.post('/getuser', fetchuser, async(req, res) => {
+router.post('/getuser', fetchuser, async (req, res) => {
 
     try {
-        userId = req.user.id;
+        let userId = req.user.id;
         const user = await User.findById(userId).select("-password")
         res.send(user)
     } catch (error) {
